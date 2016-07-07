@@ -1,5 +1,7 @@
 #include "IRremote.h"
 #include "IRremoteInt.h"
+#include <wiringPi.h>
+
 
 //+=============================================================================
 void  IRsend::sendRaw (const unsigned int buf[],  unsigned int len,  unsigned int hz)
@@ -52,11 +54,13 @@ void  IRsend::space (unsigned int time)
 // A few hours staring at the ATmega documentation and this will all make sense.
 // See my Secrets of Arduino PWM at http://arcfn.com/2009/07/secrets-of-arduino-pwm.html for details.
 //
+#define TIMER_PWM_PIN 17
 void  IRsend::enableIROut (int khz)
 {
 	// Disable the Timer2 Interrupt (which is used for receiving IR)
 	TIMER_DISABLE_INTR; //Timer2 Overflow Interrupt
 
+    wiringPiSetupSys();
 	pinMode(TIMER_PWM_PIN, OUTPUT);
 	digitalWrite(TIMER_PWM_PIN, LOW); // When not sending PWM, we want it low
 
